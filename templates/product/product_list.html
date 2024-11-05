@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block pagetitle %}Product List {% endblock %}
+{% block home %} {% url 'product_list' %} {% endblock %}
+{% block title %}Product List {% endblock %}
+{% block content %}
+  {% include 'components/title_bar.html' with title='Product List' create='/create/' %}
+  <div class="card d-flex justify-content-end">
+    <div>
+      
+    </div>
+    <form method="get" class="d-flex justify-content-end">
+      <input type="text" name="q" placeholder="Search Product" value="{{ request.GET.q }}">
+      <button type="submit" class="bg-primary text-white py-2 px-5">Search</button>
+  </form>
+</div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} col-12" role="alert">
+        <strong>{{ message }}</strong>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+<!--  <div>
+    <a href="{% url 'product_save_for_thumbanail'%}" class="bg-success text-white py-2 px-5"
+      data-kt-customer-table-filter="update_row">Update the thumbail</a>
+  	</div>
+-->
+  <div class="container">
+    <div class="row">
+      {% for budclass, product_list in grouped_products %}
+      <div class="col-12">
+        <h2 class="my-6">{{ budclass }}</h2>
+      </div>
+      {% for product in product_list %}
+      <div class="col-md-4 mb-8">
+        <div class="card shadow">
+          <img
+            src="{{ product.image_url }}"
+            alt="{{ product.title }}"
+            class="card-img-top"
+            style="height: 300px"
+          />
+          <div class="card-body">
+            <h3 class="mb-4">{{ product.title }}</h3>
+            <h6 class="font-weight-light text-gray-600">
+              Strain Type: {{ product.category.title }}
+            </h6>
+            <div class="d-flex gap-5">
+              <h6 class="font-weight-light text-gray-600">
+                THC- {{ product.thc_content }}%
+              </h6>
+              <h6 class="font-weight-light text-gray-600 mb-5">
+                CBD- {{ product.cbd_content }}%
+              </h6>
+            </div>
+            <h5 class="mb-6">${{ product.price }}</h5>
+            <div class="d-flex gap-5 ">
+              <div>
+                <a href="{% url 'product_update' product.pk %}" class="bg-success text-white py-2 px-5"
+                  data-kt-customer-table-filter="update_row">Update</a>
+              </div>
+              <div>
+                <a onclick="remove({{ product.pk }}, '{% url "product_delete" %}', '{{ product }}',)" class="bg-danger text-white py-2 px-5 cursor-pointer" id="obj"
+                  data-kt-customer-table-filter="delete_row">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+  <script></script>
+{% endblock %}
+
+
+
+
+
